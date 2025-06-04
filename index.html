@@ -1,0 +1,1234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elephant Information | 大象信息</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#8B4513',
+                        secondary: '#1E3A8A',
+                        accent: '#F59E0B',
+                        neutral: '#F9FAFB',
+                        dark: '#1F2937'
+                    },
+                    fontFamily: {
+                        inter: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .card-shadow {
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            }
+            .card-hover {
+                transition: all 0.3s ease;
+            }
+            .card-hover:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            }
+            .bg-pattern {
+                background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B4513' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            }
+        }
+    </style>
+</head>
+<body class="font-inter bg-neutral text-dark min-h-screen bg-pattern">
+    <!-- Language Selector Modal -->
+    <div id="language-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white rounded-xl p-8 max-w-md w-full mx-4 transform transition-all scale-100">
+            <h2 class="text-2xl font-bold mb-6 text-center text-primary">选择语言 / Select Language</h2>
+            <div class="grid grid-cols-2 gap-4">
+                <button id="chinese-btn" class="bg-primary hover:bg-primary/90 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center">
+                    <i class="fa fa-language mr-2"></i> 中文
+                </button>
+                <button id="english-btn" class="bg-secondary hover:bg-secondary/90 text-white font-medium py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center">
+                    <i class="fa fa-language mr-2"></i> English
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header -->
+    <header id="header" class="sticky top-0 z-40 bg-white/90 backdrop-blur-sm shadow-sm transition-all duration-300">
+        <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fa fa-elephant text-primary text-2xl"></i>
+                <h1 class="text-xl md:text-2xl font-bold text-primary">Elephant Info</h1>
+            </div>
+            <div class="flex items-center space-x-4">
+                <button id="language-toggle" class="bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-lg transition-all duration-300 flex items-center">
+                    <i class="fa fa-globe mr-2"></i>
+                    <span id="current-language">中文</span>
+                </button>
+                <button id="back-btn" class="hidden bg-secondary/10 hover:bg-secondary/20 text-secondary px-4 py-2 rounded-lg transition-all duration-300 flex items-center">
+                    <i class="fa fa-arrow-left mr-2"></i>
+                    <span id="back-text">返回</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <!-- Hero Section -->
+        <section id="hero" class="mb-12 text-center">
+            <h2 class="text-[clamp(2rem,5vw,3.5rem)] font-bold text-primary mb-4 transition-all duration-500">
+                <span class="chinese">探索大象的世界</span>
+                <span class="english hidden">Explore the World of Elephants</span>
+            </h2>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto mb-8 transition-all duration-500">
+                <span class="chinese">了解12种不同种类的大象，从已灭绝的古代象到现存的现代象。</span>
+                <span class="english hidden">Learn about 12 different species of elephants, from extinct ancient elephants to modern-day species.</span>
+            </p>
+        </section>
+
+        <!-- Search and Filter -->
+        <section class="mb-8">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div class="relative w-full md:w-1/2">
+                    <input id="search-input" type="text" placeholder="搜索大象种类..." class="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all duration-300">
+                    <i class="fa fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
+                </div>
+                <div class="flex flex-wrap gap-2">
+                    <button class="filter-btn bg-primary/10 hover:bg-primary/20 text-primary px-4 py-2 rounded-lg transition-all duration-300" data-filter="all">
+                        <span class="chinese">全部</span>
+                        <span class="english hidden">All</span>
+                    </button>
+                    <button class="filter-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-all duration-300" data-filter="extinct">
+                        <span class="chinese">已灭绝</span>
+                        <span class="english hidden">Extinct</span>
+                    </button>
+                    <button class="filter-btn bg-gray-100 hover:bg-gray-200 text-gray-700 px-4 py-2 rounded-lg transition-all duration-300" data-filter="living">
+                        <span class="chinese">现存</span>
+                        <span class="english hidden">Living</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Elephants Grid -->
+        <section id="elephants-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-12">
+            <!-- Elephant cards will be generated here -->
+        </section>
+
+        <!-- Elephant Detail View -->
+        <section id="elephant-detail" class="hidden py-8">
+            <div class="bg-white rounded-2xl shadow-lg overflow-hidden transition-all duration-500">
+                <div class="relative h-64 md:h-80 overflow-hidden">
+                    <img id="detail-image" src="" alt="" class="w-full h-full object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent flex items-end">
+                        <div class="p-6 md:p-8 w-full">
+                            <h2 id="detail-name" class="text-2xl md:text-3xl font-bold text-white mb-2"></h2>
+                            <p id="detail-latin-name" class="text-xl text-white/80 italic"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-6 md:p-8">
+                    <div class="flex flex-wrap gap-3 mb-6">
+                        <span id="detail-status" class="px-3 py-1 rounded-full text-sm font-medium"></span>
+                        <span id="detail-period" class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700"></span>
+                        <span id="detail-size" class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-700"></span>
+                    </div>
+                    
+                    <div class="mb-6">
+                        <h3 class="text-xl font-bold mb-3 text-primary">
+                            <span class="chinese">描述</span>
+                            <span class="english hidden">Description</span>
+                        </h3>
+                        <p id="detail-description" class="text-gray-700 leading-relaxed"></p>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                        <div>
+                            <h3 class="text-xl font-bold mb-3 text-primary">
+                                <span class="chinese">特征</span>
+                                <span class="english hidden">Features</span>
+                            </h3>
+                            <ul id="detail-features" class="space-y-2 text-gray-700">
+                                <!-- Features will be inserted here -->
+                            </ul>
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold mb-3 text-primary">
+                                <span class="chinese">栖息地</span>
+                                <span class="english hidden">Habitat</span>
+                            </h3>
+                            <p id="detail-habitat" class="text-gray-700 leading-relaxed"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-8">
+                        <h3 class="text-xl font-bold mb-3 text-primary">
+                            <span class="chinese">有趣的事实</span>
+                            <span class="english hidden">Interesting Facts</span>
+                        </h3>
+                        <ul id="detail-facts" class="space-y-3 text-gray-700">
+                            <!-- Facts will be inserted here -->
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4 flex items-center">
+                        <i class="fa fa-elephant mr-2 text-accent"></i>
+                        <span class="chinese">大象信息</span>
+                        <span class="english hidden">Elephant Info</span>
+                    </h3>
+                    <p class="text-gray-400 mb-4">
+                        <span class="chinese">探索12种不同种类的大象，了解它们的历史、特征和栖息地。</span>
+                        <span class="english hidden">Explore 12 different species of elephants and learn about their history, characteristics, and habitats.</span>
+                    </p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fa fa-instagram"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <i class="fa fa-pinterest"></i>
+                        </a>
+                    </div>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">
+                        <span class="chinese">快速链接</span>
+                        <span class="english hidden">Quick Links</span>
+                    </h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <span class="chinese">首页</span>
+                            <span class="english hidden">Home</span>
+                        </a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <span class="chinese">所有大象</span>
+                            <span class="english hidden">All Elephants</span>
+                        </a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <span class="chinese">已灭绝物种</span>
+                            <span class="english hidden">Extinct Species</span>
+                        </a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <span class="chinese">现存物种</span>
+                            <span class="english hidden">Living Species</span>
+                        </a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors duration-300">
+                            <span class="chinese">保护工作</span>
+                            <span class="english hidden">Conservation</span>
+                        </a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-xl font-bold mb-4">
+                        <span class="chinese">联系我们</span>
+                        <span class="english hidden">Contact Us</span>
+                    </h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i class="fa fa-map-marker mt-1 mr-3 text-accent"></i>
+                            <span class="text-gray-400">
+                                <span class="chinese">北京市海淀区中关村南大街5号</span>
+                                <span class="english hidden">No.5 South Street, Zhongguancun, Haidian District, Beijing</span>
+                            </span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-envelope mr-3 text-accent"></i>
+                            <a href="mailto:info@elephantinfo.com" class="text-gray-400 hover:text-white transition-colors duration-300">info@elephantinfo.com</a>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fa fa-phone mr-3 text-accent"></i>
+                            <a href="tel:+8610123456789" class="text-gray-400 hover:text-white transition-colors duration-300">
+                                <span class="chinese">+86 (10) 1234-5678</span>
+                                <span class="english hidden">+86 (10) 1234-5678</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
+                <p>
+                    <span class="chinese">&copy; 2025 大象信息网站. 保留所有权利.</span>
+                    <span class="english hidden">&copy; 2025 Elephant Info. All rights reserved.</span>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Elephant data
+        const elephants = [
+            {
+                id: 1,
+                name: {
+                    chinese: "始乳齿象",
+                    english: "Eritherium"
+                },
+                latinName: "Eritherium azzouzorum",
+                image: "https://picsum.photos/id/26/800/500",
+                status: "extinct",
+                statusText: {
+                    chinese: "已灭绝",
+                    english: "Extinct"
+                },
+                period: {
+                    chinese: "晚古新世（约6000万年前）",
+                    english: "Late Paleocene (约60 million years ago)"
+                },
+                size: {
+                    chinese: "体长约1.2米，肩高约0.6米",
+                    english: "约1.2 meters long, 0.6 meters tall at the shoulder"
+                },
+                description: {
+                    chinese: "始乳齿象是已知最早的象类祖先之一，生活在大约6000万年前的非洲北部。它体型较小，与现代象相差很大，更接近中小型哺乳动物。始乳齿象的发现为研究象类的演化提供了重要线索。",
+                    english: "Eritherium is one of the earliest known ancestors of elephants, living in northern Africa around 60 million years ago. It was relatively small, quite different from modern elephants and more similar to medium to small-sized mammals. The discovery of Eritherium provides important clues for studying the evolution of elephants."
+                },
+                features: {
+                    chinese: [
+                        "体型较小，类似现代的猪或貘",
+                        "牙齿结构简单，尚未演化出特化的象鼻",
+                        "四肢短而粗壮，适合在森林环境中活动"
+                    ],
+                    english: [
+                        "Small in size, similar to modern pigs or tapirs",
+                        "Simple tooth structure, no specialized trunk yet",
+                        "Short, sturdy limbs suitable for forest environments"
+                    ]
+                },
+                habitat: {
+                    chinese: "始乳齿象生活在热带雨林环境中，主要分布在现在的摩洛哥等地。",
+                    english: "Eritherium lived in tropical rainforest environments, mainly in what is now Morocco."
+                },
+                facts: {
+                    chinese: [
+                        "它的化石最早在2001年被发现并描述",
+                        "始乳齿象并不是直接的现代象祖先，而是早期分支之一",
+                        "科学家通过研究其牙齿化石，推测它的食性可能类似于现代的貘"
+                    ],
+                    english: [
+                        "Its fossils were first discovered and described in 2001",
+                        "Eritherium is not a direct ancestor of modern elephants but one of the early branches",
+                        "Scientists推测 its diet might have been similar to that of modern tapirs based on tooth fossils"
+                    ]
+                }
+            },
+            {
+                id: 2,
+                name: {
+                    chinese: "努米底亚象",
+                    english: "Numidotherium"
+                },
+                latinName: "Numidotherium koholense",
+                image: "https://picsum.photos/id/28/800/500",
+                status: "extinct",
+                statusText: {
+                    chinese: "已灭绝",
+                    english: "Extinct"
+                },
+                period: {
+                    chinese: "早渐新世（约3700万年前）",
+                    english: "Early Oligocene (约37 million years ago)"
+                },
+                size: {
+                    chinese: "体长约2米，肩高约1米",
+                    english: "约2 meters long, 1 meter tall at the shoulder"
+                },
+                description: {
+                    chinese: "努米底亚象是一种已灭绝的早期象类，生活在约3700万年前的非洲北部。它比始乳齿象稍大，但仍然远小于现代象。努米底亚象被认为是象类演化中的一个重要过渡物种。",
+                    english: "Numidotherium is an extinct early elephant species that lived in northern Africa about 37 million years ago. It was slightly larger than Eritherium but still much smaller than modern elephants. Numidotherium is considered an important transitional species in elephant evolution."
+                },
+                features: {
+                    chinese: [
+                        "具有原始的象牙雏形",
+                        "鼻子可能比始乳齿象稍长，但尚未形成现代象的长鼻",
+                        "四肢更加粗壮，适应更开阔的环境"
+                    ],
+                    english: [
+                        "Had primitive tusks",
+                        "Nose possibly slightly longer than Eritherium but not yet a full trunk",
+                        "Limbs more robust, adapted to more open environments"
+                    ]
+                },
+                habitat: {
+                    chinese: "努米底亚象生活在河流和湖泊附近的森林环境中，分布于现在的阿尔及利亚和突尼斯等地。",
+                    english: "Numidotherium lived in forested environments near rivers and lakes, in what is now Algeria and Tunisia."
+                },
+                facts: {
+                    chinese: [
+                        "它的名字来源于古地名努米底亚（现在的北非部分地区）",
+                        "努米底亚象的化石显示其可能已经开始发展出适合挖掘植物根茎的牙齿结构",
+                        "它与恐象等其他早期象类可能有共同的祖先"
+                    ],
+                    english: [
+                        "Its name is derived from the ancient region of Numidia (now parts of North Africa)",
+                        "Fossils suggest it may have started developing tooth structures suitable for digging up plant roots",
+                        "It may share a common ancestor with other early elephants like Deinotherium"
+                    ]
+                }
+            },
+            {
+                id: 3,
+                name: {
+                    chinese: "纳玛地象",
+                    english: "Phiomia"
+                },
+                latinName: "Phiomia namadicus",
+                image: "https://picsum.photos/id/29/800/500",
+                status: "extinct",
+                statusText: {
+                    chinese: "已灭绝",
+                    english: "Extinct"
+                },
+                period: {
+                    chinese: "早渐新世（约3600万年前）",
+                    english: "Early Oligocene (约36 million years ago)"
+                },
+                size: {
+                    chinese: "体长约3米，肩高约1.8米",
+                    english: "约3 meters long, 1.8 meters tall at the shoulder"
+                },
+                description: {
+                    chinese: "纳玛地象是一种已灭绝的早期象类，生活在约3600万年前的非洲。它比其祖先更大，具有更明显的象牙和更发达的头骨结构。纳玛地象被认为是现代象和猛犸象的重要祖先之一。",
+                    english: "Phiomia is an extinct early elephant that lived in Africa about 36 million years ago. It was larger than its ancestors, with more prominent tusks and a more developed skull structure. Phiomia is considered one of the important ancestors of modern elephants and mammoths."
+                },
+                features: {
+                    chinese: [
+                        "上下颚都有象牙，但下颚象牙较短且扁平",
+                        "头骨结构更接近现代象，但仍然较为原始",
+                        "可能具有中等长度的鼻子，更接近现代象鼻的雏形"
+                    ],
+                    english: [
+                        "Had tusks in both upper and lower jaws, but lower tusks were shorter and flatter",
+                        "Skull structure more similar to modern elephants but still primitive",
+                        "Likely had a medium-length nose, closer to the precursor of the modern trunk"
+                    ]
+                },
+                habitat: {
+                    chinese: "纳玛地象主要生活在草原和湿地环境中，分布于现在的埃及和苏丹等地。",
+                    english: "Phiomia primarily lived in grassland and wetland environments, in what is now Egypt and Sudan."
+                },
+                facts: {
+                    chinese: [
+                        "它的名字来源于埃及神话中的菲奥姆地区",
+                        "纳玛地象的化石最早在1908年被发现",
+                        "科学家认为它可能已经开始以树叶和草本植物为食"
+                    ],
+                    english: [
+                        "Its name is derived from the Fayoum region in Egyptian mythology",
+                        "Phiomia fossils were first discovered in 1908",
+                        "Scientists believe it may have started feeding on leaves and grasses"
+                    ]
+                }
+            },
+            {
+                id: 4,
+                name: {
+                    chinese: "恐象",
+                    english: "Deinotherium"
+                },
+                latinName: "Deinotherium giganteum",
+                image: "https://picsum.photos/id/30/800/500",
+                status: "extinct",
+                statusText: {
+                    chinese: "已灭绝",
+                    english: "Extinct"
+                },
+                period: {
+                    chinese: "中新世至更新世（约1000万至200万年前）",
+                    english: "Miocene to Pleistocene (约10 to 2 million years ago)"
+                },
+                size: {
+                    chinese: "体长可达6米，肩高约3.5米",
+                    english: "Up to 6 meters long, 3.5 meters tall at the shoulder"
+                },
+                description: {
+                    chinese: "恐象是一种已灭绝的巨型象类，生活在约1000万至200万年前的欧洲、亚洲和非洲。它是已知最大的象类之一，以其独特的向下弯曲的下颚象牙而闻名。",
+                    english: "Deinotherium is an extinct giant elephant that lived in Europe, Asia, and Africa from about 10 to 2 million years ago. It was one of the largest known elephants, famous for its unique downward-curving lower tusks."
+                },
+                features: {
+                    chinese: [
+                        "独特的下颚象牙向下弯曲，可能用于剥树皮或挖掘植物",
+                        "头骨相对较低平，与现代象的高耸头骨不同",
+                        "体型庞大，四肢粗壮，是当时陆地上最大的哺乳动物之一"
+                    ],
+                    english: [
+                        "Unique downward-curving lower tusks, possibly used for stripping bark or digging for plants",
+                        "Skull relatively low and flat, different from the high-domed skulls of modern elephants",
+                        "Huge body with massive limbs, one of the largest land mammals of its time"
+                    ]
+                },
+                habitat: {
+                    chinese: "恐象生活在森林和草原的混合环境中，分布范围广泛，包括现在的欧洲、亚洲和非洲部分地区。",
+                    english: "Deinotherium lived in mixed forest and grassland environments, with a wide distribution including parts of modern-day Europe, Asia, and Africa."
+                },
+                facts: {
+                    chinese: [
+                        "恐象的名字意为'恐怖的野兽'，但实际上它可能是温和的草食动物",
+                        "它的下颚象牙结构在象类中独一无二，用途至今仍有争议",
+                        "恐象灭绝的原因可能与气候变化和栖息地丧失有关"
+                    ],
+                    english: [
+                        "The name Deinotherium means 'terrible beast', but it was likely a gentle herbivore",
+                        "Its lower tusk structure is unique among elephants, and their exact用途 remains debated",
+                        "The extinction of Deinotherium may be related to climate change and habitat loss"
+                    ]
+                }
+            },
+            {
+                id: 5,
+                name: {
+                    chinese: "长毛猛犸象",
+                    english: "Woolly Mammoth"
+                },
+                latinName: "Mammuthus primigenius",
+                image: "https://picsum.photos/id/31/800/500",
+                status: "extinct",
+                statusText: {
+                    chinese: "已灭绝",
+                    english: "Extinct"
+                },
+                period: {
+                    chinese: "更新世至全新世（约48万至4000年前）",
+                    english: "Pleistocene to Holocene (约480,000 to 4,000 years ago)"
+                },
+                size: {
+                    chinese: "肩高约2.7-3.4米，体重可达6-8吨",
+                    english: "Shoulder height约2.7-3.4 meters, weight可达6-8 tons"
+                },
+                description: {
+                    chinese: "长毛猛犸象是一种适应寒冷气候的象类，生活在冰河时期的欧亚大陆和北美洲。它以其长长的毛发、弯曲的象牙和耐寒的生理特征而闻名，是最著名的已灭绝动物之一。",
+                    english: "The woolly mammoth was an elephant species adapted to cold climates, living in Eurasia and North America during the Ice Age. It is famous for its long hair, curved tusks, and cold-resistant physical features, and is one of the most well-known extinct animals."
+                },
+                features: {
+                    chinese: [
+                        "覆盖着浓密的长毛，外层为保护性的粗毛，内层为保暖的绒毛",
+                        "巨大而弯曲的象牙，最长可达5米，可能用于争夺配偶或清除积雪",
+                        "有一个驼峰状的脂肪储备，帮助它在寒冷环境中生存",
+                        "耳朵和尾巴较短，减少热量散失"
+                    ],
+                    english: [
+                        "Covered in thick fur, with a protective outer layer of coarse hair and a warm inner layer of underfur",
+                        "Large, curved tusks up to 5 meters long, possibly used for mate competition or clearing snow",
+                        "Had a hump-like fat reserve to help survive in cold environments",
+                        "Smaller ears and tail to reduce heat loss"
+                    ]
+                },
+                habitat: {
+                    chinese: "长毛猛犸象主要生活在苔原和草原环境中，分布于现在的欧洲、亚洲北部和北美洲。",
+                    english: "Woolly mammoths primarily lived in tundra and grassland environments, across what is now Europe, northern Asia, and North America."
+                },
+                facts: {
+                    chinese: [
+                        "由于生活在寒冷环境中，长毛猛犸象的尸体经常被冻结在冰层中，保存得非常完整",
+                        "科学家已经成功从冷冻的猛犸象尸体中提取出DNA，并正在研究复活这种物种的可能性",
+                        "长毛猛犸象与现代非洲象的基因相似度约为98.5%"
+                    ],
+                    english: [
+                        "Due to the cold environment, woolly mammoth carcasses were often frozen in ice, preserving them extremely well",
+                        "Scientists have successfully extracted DNA from frozen mammoth remains and are researching the possibility of resurrecting the species",
+                        "Woolly mammoths share about 98.5% of their DNA with modern African elephants"
+                    ]
+                }
+            },
+            {
+                id: 6,
+                name: {
+                    chinese: "非洲草原象",
+                    english: "African Bush Elephant"
+                },
+                latinName: "Loxodonta africana",
+                image: "https://picsum.photos/id/32/800/500",
+                status: "living",
+                statusText: {
+                    chinese: "现存（濒危）",
+                    english: "Living (Endangered)"
+                },
+                period: {
+                    chinese: "更新世至今",
+                    english: "Pleistocene to present"
+                },
+                size: {
+                    chinese: "肩高可达4米，体重可达7吨以上",
+                    english: "Shoulder height可达4 meters, weight可达over 7 tons"
+                },
+                description: {
+                    chinese: "非洲草原象是现存最大的陆地哺乳动物，分布于非洲撒哈拉以南的草原和稀树草原地区。它们以其巨大的体型、长象牙和复杂的社会行为而闻名。",
+                    english: "The African bush elephant is the largest living land mammal, found in the savannas and grasslands of sub-Saharan Africa. They are known for their massive size, long tusks, and complex social behaviors."
+                },
+                features: {
+                    chinese: [
+                        "耳朵大而扇形，有助于散热",
+                        "象牙长而弯曲，雄性和雌性都有象牙",
+                        "鼻子（象鼻）非常灵活，有超过40,000块肌肉",
+                        "皮肤厚而多褶皱，能储存水分"
+                    ],
+                    english: [
+                        "Large, fan-shaped ears that help dissipate heat",
+                        "Long, curved tusks present in both males and females",
+                        "Highly flexible trunk with over 40,000 muscles",
+                        "Thick, wrinkled skin that can retain moisture"
+                    ]
+                },
+                habitat: {
+                    chinese: "非洲草原象主要生活在草原、稀树草原和林地环境中，分布范围包括撒哈拉以南非洲的多个国家。",
+                    english: "African bush elephants primarily live in savanna, grassland, and woodland environments across multiple countries in sub-Saharan Africa."
+                },
+                facts: {
+                    chinese: [
+                        "非洲草原象每天需要消耗约150-300公斤的植物",
+                        "它们通过低频声音进行远距离交流，这些声音人类耳朵无法听到",
+                        "非洲草原象是群居动物，由年长的雌性领导"
+                    ],
+                    english: [
+                        "African bush elephants need to consume约150-300 kilograms of vegetation daily",
+                        "They communicate over long distances using low-frequency sounds that humans cannot hear",
+                        "African bush elephants live in family groups led by an older female"
+                    ]
+                }
+            },
+            {
+                id: 7,
+                name: {
+                    chinese: "亚洲象",
+                    english: "Asian Elephant"
+                },
+                latinName: "Elephas maximus",
+                image: "https://picsum.photos/id/33/800/500",
+                status: "living",
+                statusText: {
+                    chinese: "现存（濒危）",
+                    english: "Living (Endangered)"
+                },
+                period: {
+                    chinese: "更新世至今",
+                    english: "Pleistocene to present"
+                },
+                size: {
+                    chinese: "肩高约2.4-3.1米，体重约3-5吨",
+                    english: "Shoulder height约2.4-3.1 meters, weight约3-5 tons"
+                },
+                description: {
+                    chinese: "亚洲象是亚洲最大的陆地哺乳动物，分布于南亚和东南亚的森林和草原地区。它们比非洲象稍小，耳朵也较小，且只有雄性有明显的象牙。",
+                    english: "The Asian elephant is the largest land mammal in Asia, found in the forests and grasslands of South and Southeast Asia. They are slightly smaller than African elephants, with smaller ears, and only males have prominent tusks."
+                },
+                features: {
+                    chinese: [
+                        "耳朵较小，形状更像印度次大陆的轮廓",
+                        "只有雄性有明显的象牙，雌性象牙通常很小或不外露",
+                        "头顶有两个明显的隆起",
+                        "象鼻末端有一个手指状的突起，有助于抓取物体"
+                    ],
+                    english: [
+                        "Smaller ears shaped more like the outline of the Indian subcontinent",
+                        "Only males have prominent tusks; females' tusks are usually small or hidden",
+                        "Two distinct bumps on the top of the head",
+                        "A single 'finger-like' projection at the end of the trunk for grasping objects"
+                    ]
+                },
+                habitat: {
+                    chinese: "亚洲象主要生活在热带雨林、季雨林和草原环境中，分布于印度、斯里兰卡、尼泊尔、泰国、马来西亚等国家。",
+                    english: "Asian elephants primarily live in tropical rainforests, monsoon forests, and grasslands in countries such as India, Sri Lanka, Nepal, Thailand, and Malaysia."
+                },
+                facts: {
+                    chinese: [
+                        "亚洲象在亚洲文化中具有重要的宗教和象征意义",
+                        "它们是食草动物，每天需要花费12-18小时进食",
+                        "亚洲象的记忆力很强，能够记住复杂的迁徙路线和水源位置"
+                    ],
+                    english: [
+                        "Asian elephants hold significant religious and cultural symbolism in Asian cultures",
+                        "They are herbivores and spend 12-18 hours a day eating",
+                        "Asian elephants have excellent memories and can remember complex migration routes and water sources"
+                    ]
+                }
+            },
+            {
+                id: 8,
+                name: {
+                    chinese: "乳齿象",
+                    english: "Mastodon"
+                },
+                latinName: "Mammut americanum",
+                image: "https://picsum.photos/id/34/800/500",
+                status: "extinct",
+                statusText: {
+                    chinese: "已灭绝",
+                    english: "Extinct"
+                },
+                period: {
+                    chinese: "上新世至更新世（约500万至1万年前）",
+                    english: "Pliocene to Pleistocene (约5 million to 10,000 years ago)"
+                },
+                size: {
+                    chinese: "肩高约2.5-3米，体重约4-6吨",
+                    english: "Shoulder height约2.5-3 meters, weight约4-6 tons"
+                },
+                description: {
+                    chinese: "乳齿象是一种已灭绝的象类，与猛犸象和现代象是近亲，但属于不同的科。它们生活在北美洲和欧亚大陆的森林环境中，以其独特的牙齿结构而闻名。",
+                    english: "Mastodons are extinct elephants closely related to mammoths and modern elephants but belonging to a different family. They lived in forested environments in North America and Eurasia and are known for their unique tooth structure."
+                },
+                features: {
+                    chinese: [
+                        "牙齿上有许多锥形的尖峰，适合咀嚼树枝和树叶",
+                        "象牙相对较直，不像猛犸象那样弯曲",
+                        "身体较为粗壮，四肢较短",
+                        "可能有一层较厚的毛发，但不如长毛猛犸象浓密"
+                    ],
+                    english: [
+                        "Teeth with numerous cone-shaped cusps, suitable for chewing branches and leaves",
+                        "Relatively straight tusks, not as curved as those of mammoths",
+                        "Stockier build with shorter limbs",
+                        "Likely had a thick coat of hair, but not as dense as woolly mammoths"
+                    ]
+                },
+                habitat: {
+                    chinese: "乳齿象主要生活在森林和林地环境中，分布于现在的北美洲和欧亚大陆部分地区。",
+                    english: "Mastodons primarily lived in forested and wooded environments across what is now North America and parts of Eurasia."
+                },
+                facts: {
+                    chinese: [
+                        "乳齿象的名字来源于希腊语，意为'乳房牙齿'，指其独特的牙齿结构",
+                        "它们与猛犸象生活在同一时期，但栖息地和食性不同",
+                        "乳齿象的化石经常在美国的沼泽和湖泊中被发现"
+                    ],
+                    english: [
+                        "The name Mastodon comes from Greek, meaning 'breast tooth', referring to their unique tooth structure",
+                        "They coexisted with mammoths but had different habitats and diets",
+                        "Mastodon fossils are often found in swamps and lakes in the United States"
+                    ]
+                }
+            },
+            {
+                id: 9,
+                name: {
+                    chinese: "铲齿象",
+                    english: "Platybelodon"
+                },
+                latinName: "Platybelodon grangeri",
+                image: "https://picsum.photos/id/35/800/500",
+                status: "extinct",
+                statusText: {
+                    chinese: "已灭绝",
+                    english: "Extinct"
+                },
+                period: {
+                    chinese: "中新世（约1500万至400万年前）",
+                    english: "Miocene (约15 to 4 million years ago)"
+                },
+                size: {
+                    chinese: "肩高约2.5米，体重约3-4吨",
+                    english: "Shoulder height约2.5 meters, weight约3-4 tons"
+                },
+                description: {
+                    chinese: "铲齿象是一种已灭绝的奇特象类，以其独特的扁平下颚和铲子状的象牙而闻名。它们生活在约1500万至400万年前的亚洲和非洲，是象类演化中的一个特殊分支。",
+                    english: "Platybelodon is an extinct and peculiar elephant species known for its unique flattened lower jaw and shovel-like tusks. They lived in Asia and Africa from about 15 to 4 million years ago and represent a special branch in elephant evolution."
+                },
+                features: {
+                    chinese: [
+                        "下颚极度扁平，形成一个宽大的铲子状结构",
+                        "上下颚都有象牙，下颚象牙扁平且宽阔，可能用于铲起水生植物",
+                        "体型中等，比现代象略小",
+                        "鼻子可能较短，但非常灵活"
+                    ],
+                    english: [
+                        "Extremely flattened lower jaw forming a broad, shovel-like structure",
+                        "Tusks present in both upper and lower jaws; lower tusks were flat and wide, possibly used for scooping up aquatic plants",
+                        "Medium-sized, slightly smaller than modern elephants",
+                        "Trunk likely shorter but very flexible"
+                    ]
+                },
+                habitat: {
+                    chinese: "铲齿象主要生活在河流和湖泊附近的湿地环境中，分布于现在的中国、印度、肯尼亚等地。",
+                    english: "Platybelodon primarily lived in wetland environments near rivers and lakes, in what is now China, India, Kenya, and other regions."
+                },
+                facts: {
+                    chinese: [
+                        "铲齿象的名字意为'扁平的象牙'，描述了其最显著的特征",
+                        "科学家认为它们的铲子状下颚可能用于切割或铲起浅水中的植物",
+                        "铲齿象的化石在中国宁夏等地有大量发现"
+                    ],
+                    english: [
+                        "The name Platybelodon means 'flat tusk', describing its most distinctive feature",
+                        "Scientists believe their shovel-like lower jaws may have been used to cut or scoop up plants in shallow water",
+                        "Platybelodon fossils have been found in large numbers in Ningxia, China, and other locations"
+                    ]
+                }
+            },
+            {
+                id: 10,
+                name: {
+                    chinese: "古乳齿象",
+                    english: "Palaeomastodon"
+                },
+                latinName: "Palaeomastodon beadnelli",
+                image: "https://picsum.photos/id/36/800/500",
+                status: "extinct",
+                statusText: {
+                    chinese: "已灭绝",
+                    english: "Extinct"
+                },
+                period: {
+                    chinese: "晚渐新世至早中新世（约3000万至2300万年前）",
+                    english: "Late Oligocene to Early Miocene (约30 to 23 million years ago)"
+                },
+                size: {
+                    chinese: "肩高约2米，体重约2吨",
+                    english: "Shoulder height约2 meters, weight约2 tons"
+                },
+                description: {
+                    chinese: "古乳齿象是一种已灭绝的早期象类，生活在约3000万至2300万年前的非洲。它是象类演化中的一个重要过渡物种，具有一些原始特征和一些现代象的雏形特征。",
+                    english: "Palaeomastodon is an extinct early elephant that lived in Africa about 30 to 23 million years ago. It is an important transitional species in elephant evolution, with some primitive features and some precursors to modern elephants."
+                },
+                features: {
+                    chinese: [
+                        "上下颚都有象牙，但上颚象牙更长",
+                        "鼻子可能中等长度，开始发展出现代象鼻的功能",
+                        "体型比现代象小，但比其早期祖先更大更粗壮",
+                        "四肢结构更接近现代象，但仍然较为原始"
+                    ],
+                    english: [
+                        "Tusks present in both upper and lower jaws, but upper tusks longer",
+                        "Trunk likely medium-length, beginning to develop the functions of a modern elephant's trunk",
+                        "Smaller than modern elephants but larger and more robust than earlier ancestors",
+                        "Limb structure more similar to modern elephants but still primitive"
+                    ]
+                },
+                habitat: {
+                    chinese: "古乳齿象主要生活在河流和湖泊附近的湿润环境中，分布于现在的埃及和苏丹等地。",
+                    english: "Palaeomastodon primarily lived in wet environments near rivers and lakes, in what is now Egypt and Sudan."
+                },
+                facts: {
+                    chinese: [
+                        "它的名字意为'古代的乳齿象'，反映了它在象类演化中的早期地位",
+                        "古乳齿象的化石最早在1908年被发现并描述",
+                        "科学家认为它可能是后期象类如恐象和真象的共同祖先"
+                    ],
+                    english: [
+                        "Its name means 'ancient mastodon', reflecting its early position in elephant evolution",
+                        "Palaeomastodon fossils were first discovered and described in 1908",
+                        "Scientists believe it may be a common ancestor of later elephants such as Deinotherium and true elephants"
+                    ]
+                }
+            },
+            {
+                id: 11,
+                name: {
+                    chinese: "克里特猛犸象",
+                    english: "Cretan Dwarf Mammoth"
+                },
+                latinName: "Mammuthus creticus",
+                image: "https://picsum.photos/id/37/800/500",
+                status: "extinct",
+                statusText: {
+                    chinese: "已灭绝",
+                    english: "Extinct"
+                },
+                period: {
+                    chinese: "更新世（约100万至50万年前）",
+                    english: "Pleistocene (约1 to 0.5 million years ago)"
+                },
+                size: {
+                    chinese: "肩高约1米，体重约300-500公斤",
+                    english: "Shoulder height约1 meter, weight约300-500 kilograms"
+                },
+                description: {
+                    chinese: "克里特猛犸象是一种已灭绝的小型猛犸象，生活在希腊的克里特岛上。它是由于岛屿环境中的资源限制而演化出的侏儒物种，是已知最小的猛犸象之一。",
+                    english: "The Cretan dwarf mammoth is an extinct small mammoth that lived on the island of Crete in Greece. It evolved into a dwarf species due to resource limitations on the island and is one of the smallest known mammoths."
+                },
+                features: {
+                    chinese: [
+                        "体型极小，仅为其大陆近亲的四分之一大小",
+                        "象牙相对较短且直",
+                        "可能适应了岛屿上有限的食物资源",
+                        "由于岛屿环境缺乏天敌，可能发展出了更缓慢的新陈代谢"
+                    ],
+                    english: [
+                        "Extremely small size, only about a quarter the size of its continental relatives",
+                        "Relatively short and straight tusks",
+                        "Likely adapted to the limited food resources on the island",
+                        "May have developed a slower metabolism due to the lack of predators on the island"
+                    ]
+                },
+                habitat: {
+                    chinese: "克里特猛犸象生活在克里特岛的草原和森林环境中，分布范围仅限于该岛屿。",
+                    english: "The Cretan dwarf mammoth lived in grassland and forest environments on the island of Crete, with a distribution limited to the island."
+                },
+                facts: {
+                    chinese: [
+                        "克里特猛犸象是岛屿侏儒化的典型例子，这种现象在岛屿物种中很常见",
+                        "它的灭绝可能与约50万年前克里特岛的海平面上升有关",
+                        "克里特猛犸象的化石显示其生长速度比大陆猛犸象慢"
+                    ],
+                    english: [
+                        "The Cretan dwarf mammoth is a classic example of island dwarfism, a common phenomenon in island species",
+                        "Its extinction may be related to rising sea levels on Crete about 500,000 years ago",
+                        "Fossils indicate that the Cretan dwarf mammoth grew more slowly than continental mammoths"
+                    ]
+                }
+            },
+            {
+                id: 12,
+                name: {
+                    chinese: "草原猛犸象",
+                    english: "Steppe Mammoth"
+                },
+                latinName: "Mammuthus trogontherii",
+                image: "https://picsum.photos/id/38/800/500",
+                status: "extinct",
+                statusText: {
+                    chinese: "已灭绝",
+                    english: "Extinct"
+                },
+                period: {
+                    chinese: "更新世（约180万至10万年前）",
+                    english: "Pleistocene (约1.8 million to 100,000 years ago)"
+                },
+                size: {
+                    chinese: "肩高可达4.5米，体重可达10吨以上",
+                    english: "Shoulder height可达4.5 meters, weight可达over 10 tons"
+                },
+                description: {
+                    chinese: "草原猛犸象是一种已灭绝的巨型猛犸象，生活在冰河时期的欧亚大陆草原上。它是已知最大的象类之一，也是长毛猛犸象的祖先之一。",
+                    english: "The steppe mammoth is an extinct giant mammoth that lived on the grasslands of Eurasia during the Ice Age. It was one of the largest known elephants and an ancestor of the woolly mammoth."
+                },
+                features: {
+                    chinese: [
+                        "体型巨大，是已知最大的象类之一",
+                        "象牙非常长，有些个体的象牙超过5米",
+                        "毛发可能不如长毛猛犸象浓密，但仍然适应寒冷气候",
+                        "头骨结构更接近现代象，但具有一些原始特征"
+                    ],
+                    english: [
+                        "Huge size, one of the largest known elephant species",
+                        "Extremely long tusks, exceeding 5 meters in some individuals",
+                        "Fur likely less dense than the woolly mammoth but still adapted to cold climates",
+                        "Skull structure more similar to modern elephants but with some primitive features"
+                    ]
+                },
+                habitat: {
+                    chinese: "草原猛犸象主要生活在开阔的草原和苔原环境中，分布于现在的欧洲、亚洲北部和北美洲。",
+                    english: "Steppe mammoths primarily lived in open grassland and tundra environments across what is now Europe, northern Asia, and North America."
+                },
+                facts: {
+                    chinese: [
+                        "草原猛犸象可能是有史以来最大的陆地哺乳动物之一",
+                        "它们的化石在欧洲和亚洲北部广泛分布",
+                        "草原猛犸象被认为是长毛猛犸象和哥伦比亚猛犸象的祖先"
+                    ],
+                    english: [
+                        "The steppe mammoth is considered one of the largest land mammals of all time",
+                        "Their fossils are widely distributed across Europe and northern Asia",
+                        "Steppe mammoths are believed to be the ancestors of woolly mammoths and Columbian mammoths"
+                    ]
+                }
+            }
+        ];
+
+        // Current language state
+        let currentLanguage = 'chinese';
+        
+        // Initialize the app
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set up language selection
+            document.getElementById('chinese-btn').addEventListener('click', function() {
+                setLanguage('chinese');
+                document.getElementById('language-modal').classList.add('opacity-0');
+                setTimeout(() => {
+                    document.getElementById('language-modal').classList.add('hidden');
+                }, 300);
+            });
+            
+            document.getElementById('english-btn').addEventListener('click', function() {
+                setLanguage('english');
+                document.getElementById('language-modal').classList.add('opacity-0');
+                setTimeout(() => {
+                    document.getElementById('language-modal').classList.add('hidden');
+                }, 300);
+            });
+            
+            // Language toggle button
+            document.getElementById('language-toggle').addEventListener('click', function() {
+                if (currentLanguage === 'chinese') {
+                    setLanguage('english');
+                } else {
+                    setLanguage('chinese');
+                }
+            });
+            
+            // Back button
+            document.getElementById('back-btn').addEventListener('click', function() {
+                showGrid();
+            });
+            
+            // Search functionality
+            document.getElementById('search-input').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                filterElephants(searchTerm);
+            });
+            
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Remove active class from all buttons
+                    document.querySelectorAll('.filter-btn').forEach(b => {
+                        b.classList.remove('bg-primary/10', 'text-primary');
+                        b.classList.add('bg-gray-100', 'text-gray-700');
+                    });
+                    
+                    // Add active class to clicked button
+                    this.classList.remove('bg-gray-100', 'text-gray-700');
+                    this.classList.add('bg-primary/10', 'text-primary');
+                    
+                    // Filter elephants
+                    const filter = this.getAttribute('data-filter');
+                    filterElephants(document.getElementById('search-input').value.toLowerCase(), filter);
+                });
+            });
+            
+            // Initialize the grid
+            renderElephantsGrid(elephants);
+        });
+        
+        // Set the language
+        function setLanguage(lang) {
+            currentLanguage = lang;
+            
+            // Update language button text
+            document.getElementById('current-language').textContent = lang === 'chinese' ? '中文' : 'English';
+            document.getElementById('back-text').textContent = lang === 'chinese' ? '返回' : 'Back';
+            
+            // Update all language-specific content
+            document.querySelectorAll('.chinese, .english').forEach(el => {
+                if (el.classList.contains(lang)) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+            
+            // Update filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                const filter = btn.getAttribute('data-filter');
+                if (filter === 'all') {
+                    btn.querySelector('.chinese').textContent = '全部';
+                    btn.querySelector('.english').textContent = 'All';
+                } else if (filter === 'extinct') {
+                    btn.querySelector('.chinese').textContent = '已灭绝';
+                    btn.querySelector('.english').textContent = 'Extinct';
+                } else if (filter === 'living') {
+                    btn.querySelector('.chinese').textContent = '现存';
+                    btn.querySelector('.english').textContent = 'Living';
+                }
+            });
+            
+            // If detail view is open, update it
+            if (document.getElementById('elephant-detail').classList.contains('hidden') === false) {
+                const currentElephantId = parseInt(document.getElementById('detail-image').getAttribute('data-id'));
+                const elephant = elephants.find(e => e.id === currentElephantId);
+                if (elephant) {
+                    renderElephantDetail(elephant);
+                }
+            }
+        }
+        
+        // Render the elephants grid
+        function renderElephantsGrid(elephantsList) {
+            const grid = document.getElementById('elephants-grid');
+            grid.innerHTML = '';
+            
+            if (elephantsList.length === 0) {
+                grid.innerHTML = `
+                    <div class="col-span-full text-center py-12">
+                        <i class="fa fa-search text-4xl text-gray-300 mb-4"></i>
+                        <p class="text-lg text-gray-500">
+                            <span class="chinese">没有找到匹配的大象种类</span>
+                            <span class="english hidden">No matching elephant species found</span>
+                        </p>
+                    </div>
+                `;
+                return;
+            }
+            
+            elephantsList.forEach(elephant => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl overflow-hidden shadow-md card-shadow card-hover transition-all duration-300';
+                card.setAttribute('data-id', elephant.id);
+                
+                card.innerHTML = `
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="${elephant.image}" alt="${elephant.name[currentLanguage]}" class="w-full h-full object-cover transition-transform duration-500 hover:scale-110">
+                        <div class="absolute top-3 right-3">
+                            <span class="px-3 py-1 rounded-full text-xs font-medium ${elephant.status === 'extinct' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}">
+                                ${elephant.statusText[currentLanguage]}
+                            </span>
+                        </div>
+                    </div>
+                    <div class="p-5">
+                        <h3 class="text-xl font-bold text-primary mb-1">${elephant.name[currentLanguage]}</h3>
+                        <p class="text-gray-600 italic mb-3">${elephant.latinName}</p>
+                        <div class="flex flex-wrap gap-2 mb-4">
+                            <span class="px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
+                                ${elephant.period[currentLanguage]}
+                            </span>
+                            <span class="px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-700">
+                                ${elephant.size[currentLanguage]}
+                            </span>
+                        </div>
+                        <p class="text-gray-600 line-clamp-3 mb-4">${elephant.description[currentLanguage]}</p>
+                        <button class="w-full bg-primary hover:bg-primary/90 text-white font-medium py-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center">
+                            <span class="chinese">查看详情</span>
+                            <span class="english hidden">View Details</span>
+                            <i class="fa fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                `;
+                
+                card.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'BUTTON' || e.target.closest('button')) {
+                        const elephantId = parseInt(this.getAttribute('data-id'));
+                        const elephant = elephants.find(e => e.id === elephantId);
+                        if (elephant) {
+                            renderElephantDetail(elephant);
+                            showDetail();
+                        }
+                    }
+                });
+                
+                grid.appendChild(card);
+            });
+        }
+        
+        // Render the elephant detail view
+        function renderElephantDetail(elephant) {
+            const detailView = document.getElementById('elephant-detail');
+            
+            // Update the image
+            const detailImage = document.getElementById('detail-image');
+            detailImage.src = elephant.image;
+            detailImage.alt = elephant.name[currentLanguage];
+            detailImage.setAttribute('data-id', elephant.id);
+            
+            // Update the name and latin name
+            document.getElementById('detail-name').textContent = elephant.name[currentLanguage];
+            document.getElementById('detail-latin-name').textContent = elephant.latinName;
+            
+            // Update the status, period, and size
+            const statusEl = document.getElementById('detail-status');
+            statusEl.textContent = elephant.statusText[currentLanguage];
+            statusEl.className = `px-3 py-1 rounded-full text-sm font-medium ${elephant.status === 'extinct' ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}`;
+            
+            document.getElementById('detail-period').textContent = elephant.period[currentLanguage];
+            document.getElementById('detail-size').textContent = elephant.size[currentLanguage];
+            
+            // Update the description
+            document.getElementById('detail-description').textContent = elephant.description[currentLanguage];
+            
+            // Update the features
+            const featuresList = document.getElementById('detail-features');
+            featuresList.innerHTML = '';
+            elephant.features[currentLanguage].forEach(feature => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start';
+                li.innerHTML = `
+                    <i class="fa fa-check-circle text-primary mt-1 mr-2"></i>
+                    <span>${feature}</span>
+                `;
+                featuresList.appendChild(li);
+            });
+            
+            // Update the habitat
+            document.getElementById('detail-habitat').textContent = elephant.habitat[currentLanguage];
+            
+            // Update the facts
+            const factsList = document.getElementById('detail-facts');
+            factsList.innerHTML = '';
+            elephant.facts[currentLanguage].forEach(fact => {
+                const li = document.createElement('li');
+                li.className = 'flex items-start';
+                li.innerHTML = `
+                    <i class="fa fa-star text-accent mt-1 mr-2"></i>
+                    <span>${fact}</span>
+                `;
+                factsList.appendChild(li);
+            });
+        }
+        
+        // Show the detail view and hide the grid
+        function showDetail() {
+            document.getElementById('elephants-grid').classList.add('hidden');
+            document.getElementById('elephant-detail').classList.remove('hidden');
+            document.getElementById('back-btn').classList.remove('hidden');
+            
+            // Add animation
+            document.getElementById('elephant-detail').classList.add('opacity-0');
+            setTimeout(() => {
+                document.getElementById('elephant-detail').classList.remove('opacity-0');
+            }, 10);
+            
+            // Scroll to top
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+        
+        // Show the grid and hide the detail view
+        function showGrid() {
+            document.getElementById('elephant-detail').classList.add('hidden');
+            document.getElementById('elephants-grid').classList.remove('hidden');
+            document.getElementById('back-btn').classList.add('hidden');
+            
+            // Add animation
+            document.getElementById('elephants-grid').classList.add('opacity-0');
+            setTimeout(() => {
+                document.getElementById('elephants-grid').classList.remove('opacity-0');
+            }, 10);
+        }
+        
+        // Filter elephants by search term and status
+        function filterElephants(searchTerm, statusFilter = 'all') {
+            let filtered = elephants.filter(elephant => {
+                // Check if the elephant matches the search term
+                const nameMatch = elephant.name.chinese.toLowerCase().includes(searchTerm) || 
+                                  elephant.name.english.toLowerCase().includes(searchTerm) ||
+                                  elephant.latinName.toLowerCase().includes(searchTerm);
+                
+                const descriptionMatch = elephant.description.chinese.toLowerCase().includes(searchTerm) ||
+                                         elephant.description.english.toLowerCase().includes(searchTerm);
+                
+                // Check if the elephant matches the status filter
+                const statusMatch = statusFilter === 'all' || elephant.status === statusFilter;
+                
+                return (nameMatch || descriptionMatch) && statusMatch;
+            });
+            
+            renderElephantsGrid(filtered);
+        }
+    </script>
+</body>
+</html>    
